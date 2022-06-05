@@ -4,7 +4,7 @@ Golang client for [Supabase Storage API](https://github.com/supabase/storage-api
 ## Quick start
 Install
 ```shell
-go get github.com/supabase-community/storage-go
+go get github.com/overlorddamygod/storage-go
 ```
 
 Usage
@@ -16,7 +16,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/supabase-community/storage-go"
+	"github.com/overlorddamygod/storage-go"
 )
 
 func main() {
@@ -32,7 +32,7 @@ func main() {
 		panic(err)
 	}
 
-	resp := client.UploadFile("bucket-name", "file.txt", file)
+	resp := client.UploadFile("bucket-name", "file.txt", file, "application/text")
 	fmt.Println(resp)
 }
 ```

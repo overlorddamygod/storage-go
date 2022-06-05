@@ -21,12 +21,16 @@ const (
 	defaultSortOrder        = "asc"
 )
 
-func (c *Client) UploadOrUpdateFile(bucketId string, relativePath string, data io.Reader, update bool) FileUploadResponse {
+func (c *Client) UploadOrUpdateFile(bucketId string, relativePath string, data io.Reader, contentType string, update bool) FileUploadResponse {
+	if contentType == "" {
+		contentType = defaultFileContentType
+	}
 	c.clientTransport.header.Set("cache-control", defaultFileCacheControl)
-	c.clientTransport.header.Set("content-type", defaultFileContentType)
+	c.clientTransport.header.Set("content-type", contentType)
 	c.clientTransport.header.Set("x-upsert", strconv.FormatBool(defaultFileUpsert))
 
 	body := bufio.NewReader(data)
+
 	_path := removeEmptyFolderName(bucketId + "/" + relativePath)
 
 	var (
@@ -55,12 +59,12 @@ func (c *Client) UploadOrUpdateFile(bucketId string, relativePath string, data i
 	return response
 }
 
-func (c *Client) UpdateFile(bucketId string, relativePath string, data io.Reader) FileUploadResponse {
-	return c.UploadOrUpdateFile(bucketId, relativePath, data, true)
+func (c *Client) UpdateFile(bucketId string, relativePath string, data io.Reader, contentType string) FileUploadResponse {
+	return c.UploadOrUpdateFile(bucketId, relativePath, data, contentType, true)
 }
 
-func (c *Client) UploadFile(bucketId string, relativePath string, data io.Reader) FileUploadResponse {
-	return c.UploadOrUpdateFile(bucketId, relativePath, data, false)
+func (c *Client) UploadFile(bucketId string, relativePath string, data io.Reader, contentType string) FileUploadResponse {
+	return c.UploadOrUpdateFile(bucketId, relativePath, data, contentType, false)
 }
 
 func (c *Client) MoveFile(bucketId string, sourceKey string, destinationKey string) FileUploadResponse {
